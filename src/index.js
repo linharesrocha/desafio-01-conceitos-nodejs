@@ -42,7 +42,12 @@ app.post('/users', (request, response) => {
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
-  
+  const { user } = request;
+  const { username } = request.headers;
+
+  if(user.username === username) {
+    return response.status(201).json(user.todos)
+  }
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
