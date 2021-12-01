@@ -51,7 +51,27 @@ app.get('/todos', checksExistsUserAccount, (request, response) => {
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { user } = request;
+  const { title, deadline } = request.body;
+  const { username } = request.headers;
+
+  if(user.username === username) {
+    task = {
+      id: uuidv4(),
+      title: title,
+      done: false,
+      deadline: new Date(deadline),
+      created_at: new Date(),
+    }
+
+    user.todos.push(task);
+    response.status(201).json(task)
+  }
+  else{
+    response.status(400).json({error: "Usuário não encontrado."})
+  }
+
+
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
